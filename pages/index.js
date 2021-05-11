@@ -1,11 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
-import { useLocalStore, useObserver } from 'mobx-react';
+import { useLocalObservable, observer } from 'mobx-react';
 
 const StoreContext = React.createContext();
 
 const StoreProvider = ({ children }) => {
-  const store = useLocalStore(() => ({
+  const store = useLocalObservable(() => ({
     tasks: ['Buy milk', 'get a haircut', 'practice react'],
     addTask: (task) => {
       store.tasks.push(task);
@@ -23,11 +23,11 @@ const StoreProvider = ({ children }) => {
   );
 };
 
-const TasksCount = () => {
+const TasksCount = observer(() => {
   const store = React.useContext(StoreContext);
 
-  return useObserver(() => <h1>{store.tasksCount} Tasks!</h1>);
-};
+  return <h1>{store.tasksCount} Tasks!</h1>;
+});
 
 const TasksForm = () => {
   const store = React.useContext(StoreContext);
@@ -51,10 +51,10 @@ const TasksForm = () => {
   );
 };
 
-const TasksList = () => {
+const TasksList = observer(() => {
   const store = React.useContext(StoreContext);
 
-  return useObserver(() => (
+  return (
     <ul>
       {store.tasks.map((task) => (
         <li key={task}>
@@ -66,8 +66,8 @@ const TasksList = () => {
         </li>
       ))}
     </ul>
-  ));
-};
+  );
+});
 
 export default function Home() {
   return (
